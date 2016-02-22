@@ -25,6 +25,7 @@ def text_import():
 def color_searching(tale):
     "Searches the tale for a list of color words and counts the instances of these words up using a dictionary."
     color_dict = dict()
+    color_dict = dict()
     for word in tale: #need to slice each tale into a list of words for this to work
         if word in color_dict:
             current_val = color_dict.get(word,0)
