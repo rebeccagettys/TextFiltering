@@ -9,7 +9,7 @@ def initial_color_dict_func():
     'black':0, 'white':0, 'pink':0, 'ivory':0, 'tan':0, 'silver':0, 'gold':0, 'rose':0,'gray':0, 'olive':0, 'crimson':0, 'maroon':0,
     'fushcia':0, 'teal':0, 'lavender':0, 'lilac':0, 'aqua':0, 'azure':0, 'beige':0, 'indigo':0, 'magenta':0, 'cyan':0, 'scarlet':0,
     'canary':0, 'periwinkle':0, 'pale':0, 'dark':0}
-    return initial_color_dict
+    return initial_color_dict #
 
 def text_import():
     "Imports pickled fairy tale data from disk."
