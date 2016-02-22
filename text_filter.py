@@ -1,5 +1,7 @@
 from pattern.web import *
+import urllib2
 import pickle
+import string
 
 def initial_color_dict_func():
     "Just the initial dictionary of colors so that we have something to start from. I used my brain, crayola crayon colors, + this link \
@@ -14,41 +16,63 @@ def initial_color_dict_func():
 def text_import():
     "Imports pickled fairy tale data from disk."
     # Load data from a file (will be part of your data processing script)
-    andersen_input_file = open('andersen_tales','r')
+    andersen_input_file = open('andersen_tales.pickle','r')
     andersen_tales = pickle.load(andersen_input_file)
     #grimm_input_file = open('grimm_tales','r') #todo: add this back in later
     #grimm_tales = pickle.load(grimm_input_file) #todo: add this back in later
-    perrault_input_file = open('perrault_tales','r')
+    perrault_input_file = open('perrault_tales.pickle','r')
     perrault_tales = pickle.load(perrault_input_file)
-    return (andersen_tales ,perrault_tales) #todo: add grimm_tales
+    return [andersen_tales,perrault_tales] #todo: add grimm_tales
 
-def color_searching(tale):
+
+def color_searching(tale, initial_color_dict):
     "Searches the tale for a list of color words and counts the instances of these words up using a dictionary."
-    color_dict = dict()
-    color_dict = dict()
     for word in tale: #need to slice each tale into a list of words for this to work
+        print word
+        color_dict = initial_color_dict
         if word in color_dict:
-            current_val = color_dict.get(word,0)
+            current_val = color_dict.get(word)
             val = current_val + 1
             color_dict[word] = val #made a dictionary of the string (color, frequnecy)
-            return color_dict
+        print color_dict
+        return color_dict
 
 
-def tale_searches(*taletuple):
+def tale_searches(talelist, initial_color_dict):
     "Runs color_searching on each of the fairy tales and returns their dictionaries"
     final_dict_list = [] #empty list
-    for tale in taletuple:
-        tale_dict=color_searching(tale)
+    for tale in talelist:
+        tale_dict=color_searching(tale, initial_color_dict)
         final_dict_list.extend(tale_dict) #TODO:add grimm later, check if this needs to be 'append' or 'extend' - we want this to be a list of dictionaries
     return final_dict_list
 
-def tale_slicing(*taletuple): #TODO: make sure that this runs on the tales BEFORE tale_searches/color_searching and add grimm tales back in
-    "Slices the tales up into a list of words without spaces"
-    for tale in taletuple:
-        continue #todo: figure out how the data in each tale comes in from pickle so that you can appropriately process it
+def tale_slicing(tale_list_text): #TODO: make sure that this runs on the tales BEFORE tale_searches/color_searching and add grimm tales back in
+    "Slices the tales up into a list of words without spaces # https://mail.python.org/pipermail/tutor/2001-October/009454.html explains punctuation removal "
 
+    for tale in tale_list_text:
+        tale_no_punc = ''
+        for char in tale: #killing punctuation
+            if not is_punct_char(char):
+                tale_no_punc = tale_no_punc+char #so extend the string everytime we run into a letter
+        list_of_words = []
+        list_of_words = tale_no_punc.split() #splitting the string into the list
+        tale_list = []
+        tale_list.extend(list_of_words)
 
-initial_color_dict_func()
-text_import()
-tale_slicing (andersen_tales, perrault_tales)
-output_dicts = tale_searches(andersen_tales,perrault_tales) #todo: add grim tales later
+    return tale_list
+    print tale_list
+
+def is_punct_char(char):
+    "From python.org (link above), all this does is check if a character is puncutation or not! the ultimate helper funcion!"
+    return char in string.punctuation #1 is punctuation, 0 is not punctuation
+
+initial_color_dict = initial_color_dict_func()
+text_lists = text_import() #this is a list of strings we need to make it a list of lists
+andersen_tales_text = text_lists[0]
+perrault_tales_text = text_lists[1]
+tale_lists= tale_slicing (text_lists)
+print tale_lists
+#output_dicts = tale_searches(text_lists, initial_color_dict) #todo: add grim tales later
+#print output_dicts
+#print type(andersen_tales)
+#color_searching(andersen_tales, initial_color_dict)
