@@ -2,6 +2,9 @@ from pattern.web import *
 import urllib2
 import pickle
 import string
+import pygal
+from IPython.display import SVG
+
 
 def initial_color_dict_func():
     "Just the initial dictionary of colors so that we have something to start from. I used my brain, crayola crayon colors, + this link \
@@ -10,7 +13,7 @@ def initial_color_dict_func():
     initial_color_dict = {'red': 0, 'orange': 0, 'yellow':0, 'green':0, 'blue':0, 'purple':0, 'brown':0, 'grey':0,
     'black':0, 'white':0, 'pink':0, 'ivory':0, 'tan':0, 'silver':0, 'gold':0, 'rose':0,'gray':0, 'olive':0, 'crimson':0, 'maroon':0,
     'fushcia':0, 'teal':0, 'lavender':0, 'lilac':0, 'aqua':0, 'azure':0, 'beige':0, 'indigo':0, 'magenta':0, 'cyan':0, 'scarlet':0,
-    'canary':0, 'periwinkle':0, 'pale':0, 'dark':0}
+    'canary':0, 'periwinkle':0}
     return initial_color_dict #
 
 def text_import():
@@ -91,3 +94,35 @@ text_lists = text_import() #this is a list of strings we need to make it a list 
 tale_lists = tale_slicing(text_lists)
 #tale_lists= tale_slices (text_lists) #IGNORE
 output_dicts = tale_searches(tale_lists, initial_color_dict)
+
+
+# Now just a crap ton of data processing
+andersen_dict = output_dicts[0]
+perrault_dict = output_dicts[1]
+grimm_dict = output_dicts[2]
+andersen_item_dump = andersen_dict.items()
+perrault_item_dump = perrault_dict.items()
+grimm_item_dump = grimm_dict.items()
+
+
+def list_dumping (list):
+    color = []
+    frequency = []
+    for i in list:
+        color.append(i[0])
+        frequency.append(i[1])
+    return [color, frequency]
+
+andersen_color_freq= list_dumping(andersen_item_dump)
+perrault_color_freq = list_dumping(perrault_item_dump)
+grimm_color_freq = list_dumping(grimm_item_dump)
+
+def graphing_data_viz (output_dicts):
+    andersen_bar_graph = pygal.Bar()
+    andersen_bar_graph.title = 'Color Mention Frequency in Has Christian Andersen Stories'
+    andersen_bar_graph.x_labels = 'Color'
+    andersen_bar_graph.add = andersen_color_freq[1]
+    andersen_bar_graph.render_to_file('andersen_chart.svg')
+    #perrault_bar_graph
+    #grimm_bar_graph
+    #overall_bar_graph (add them all up or graph them all together)
