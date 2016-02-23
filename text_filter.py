@@ -115,7 +115,7 @@ def list_dumping (list):
 
 andersen_color_freq= list_dumping(andersen_item_dump)
 perrault_color_freq = list_dumping(perrault_item_dump)
-grimm_color_freq = list_dumping(grimm_item_dump)
+grimm_color_freq = list_dumping(grimm_item_dump) #
 
 def graphing_data_viz (output_dicts):
     andersen_bar_graph = pygal.Bar()
