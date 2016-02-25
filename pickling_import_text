@@ -1,21 +1,19 @@
 from pattern.web import *
 import urllib2
 import pickle
-def get_texts():
-    grimm_tales = URL('http://www.gutenberg.org/cache/epub/2591/pg2591.txt').download()
-    andersen_tales = URL('https://archive.org/download/fairytalesofhans27200gut/27200.txt').download()
-    perrault_tales = URL('https://ia600302.us.archive.org/15/items/thefairytalesofc29021gut/pg29021.txt').download()
-    #print oliver_twist_full_text #
 
-    # Save data to a file (will be part of your data fetching script)
-    andersen_file = open('andersen_tales.pickle','w') #this variable was created, now it's dumped to
-    grimm_file = open('grimm_tales.pickle','w')
-    perrault_file = open('perrault_tales.pickle','w')
-    pickle.dump(andersen_tales,andersen_file)
-    pickle.dump(grimm_tales,grimm_file)
-    pickle.dump(perrault_tales,perrault_file)
-    andersen_file.close()
-    grimm_file.close()
-    perrault_file.close()
 
-get_texts()
+
+def get_text(URL_string, name):
+    """This function grabs the text from a text file on the web and pickles it for future use.
+Arguments: URL of text file to be saved as a string, name of the file for use in naming data variables and pickle files (also a string).
+ Returns: Pickled data!"""
+
+    tale = URL(URL_string).download()
+    save_file = open(name + '.pickle', 'w')
+    pickle.dump(tale, save_file)
+    save_file.close()
+
+get_text('http://www.gutenberg.org/cache/epub/2591/pg2591.txt', 'grimm')
+get_text('https://archive.org/download/fairytalesofhans27200gut/27200.txt','andersen')
+get_text('https://ia600302.us.archive.org/15/items/thefairytalesofc29021gut/pg29021.txt', 'perrault')

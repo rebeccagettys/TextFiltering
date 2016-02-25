@@ -1,3 +1,5 @@
+""" This code was written by Rebecca Gettys, except where otherwise noted.  """
+#### MAIN SECIOTN ####
 from pattern.web import *
 import urllib2
 import pickle
@@ -9,18 +11,33 @@ COLORS = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'brown', 'grey',
     'canary', 'periwinkle']
 
 
-def text_import():
+
+
+def text_importing(name):
     """Imports previously-pickled fairy tale data (in string format from disk and returns a list of the strings.
-    Arguements: none
-    Returns: list of pickle-imported strings"""
+    Arguements: name of the pickle file of previously pickled data (as a string, without the .pickle ending)!
+    Returns: a pickle-imported string"""
     # Load data for each from from a file (will be part of your data processing script)
-    andersen_input_file = open('andersen_tales.pickle','r')
-    andersen_tales = pickle.load(andersen_input_file)
-    grimm_input_file = open('grimm_tales.pickle','r')
-    grimm_tales = pickle.load(grimm_input_file)
-    perrault_input_file = open('perrault_tales.pickle','r')
-    perrault_tales = pickle.load(perrault_input_file)
-    return [andersen_tales,perrault_tales, grimm_tales]
+    input_file = open(name+ '.pickle','r')
+    tale = pickle.load(input_file)
+    return tale
+
+def text_import (names):
+    """ Runs imports on a list of names (strings) and returns them in a list.
+    Arguments: list of strings (names)
+    Returns: a list of three strings (the data from each pickle file)"
+    """
+    text_lists = []
+    for string in names:
+        text = text_importing(string)
+        text_lists.append(text)
+    return text_lists
+
+#grimm_text = text_importing('grimm')
+#perrault_text = text_importing('perrault')
+#andersen_text = text_importing('andersen')
+#text_lists = [andersen_text, perrault_text, grimm_text]
+
 
 
 def color_searching(tale):
@@ -44,13 +61,8 @@ def tale_searches(talelist):
     Returns: list of dictionaries, one for each tale (inside each dictionary, format is color-frequency)"""
     final_dict_list = [] #empty list
     for tale in talelist:
-        #tale_dict = {}
         tale_dict=color_searching(tale)
-        #print type(tale_dict)
         final_dict_list.append(tale_dict)
-        # print tale_dict
-        # print final_dict_list
-    #print type(final_dict_list[0])
     return final_dict_list
 
 def tale_slicing(tale_list_text):
@@ -84,23 +96,24 @@ def is_punct_char(char):
     Returns: True/False if the character it is given is a puncuation mark - 1 is punctuation, 0 is not """
     return char in string.punctuation #1 is punctuation, 0 is not punctuation
 
-# print color_searching(['red', 'the', 'blue'])
-#initial_color_dict = initial_color_dict_func()
-text_lists = text_import() #this is a list of strings we need to make it a list of lists
-#andersen, perrault, grimm is always the order
-tale_lists = tale_slicing(text_lists)
-# print color_searching(tale_lists[0])
-output_dicts = tale_searches(tale_lists)
-#print output_dicts
 
+#andersen, perrault, grimm is always the order
+text_lists= text_import(['andersen', 'perrault', 'grimm']) # change these strings if you changed what got pickled
+tale_lists = tale_slicing(text_lists)
+output_dicts = tale_searches(tale_lists) #output dicts is a list of dictionaries and is your final output!
+### END OF MAIN SECTION ###
+
+
+### GRAPHING AND DATA PROCESSING ###
 
 # Now just a ton of data processing
 # just to make life easier, assign each dict inside output dict it's own variable
+
 andersen_dict = output_dicts[0]
 perrault_dict = output_dicts[1]
 grimm_dict = output_dicts[2]
 # dump dictionary to list of tuples
-andersen_item_dump = andersen_dict.items() #
+andersen_item_dump = andersen_dict.items()
 perrault_item_dump = perrault_dict.items()
 grimm_item_dump = grimm_dict.items()
 
@@ -192,4 +205,3 @@ def graph_func3(grimm):
 graph_func(andersen_color_freq)
 graph_func2(perrault_color_freq)
 graph_func3(grimm_color_freq)
-#print grimm_color_freq[0]
